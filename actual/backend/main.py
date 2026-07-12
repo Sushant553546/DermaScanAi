@@ -1,5 +1,4 @@
 import base64
-import cv2
 import numpy as np
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from typing import List
@@ -13,10 +12,10 @@ from rag_engine import SkinRAG
 app = FastAPI(title="Skin AI Diagnosis & RAG API")
 
 # Ensure these paths point to the specific  model 
-detector = SkinDetector(model_path="F:/Desktop/dsml_ainn/actual/models/skin_trained.pt")
+detector = SkinDetector(model_path="C:/Code/Skin web/DermaScanAi/actual/models/skin_trained.pt")
 
 # Pointing to the specific pkl 
-analyzer = SeverityAnalyzer(model_path="F:/Desktop/dsml_ainn/actual/models/severity_model_v1.pkl")
+analyzer = SeverityAnalyzer(model_path="C:/Code/Skin web/DermaScanAi/actual/models/severity_model_v1.pkl")
 
 rag_system = SkinRAG(persist_dir="chroma_db", pdf_dir="skin_docs")
 
