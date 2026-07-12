@@ -4,7 +4,7 @@ from langchain_community.document_loaders import PyMuPDFLoader, DirectoryLoader
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_ollama import ChatOllama
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -16,7 +16,7 @@ class SkinRAG:
         persist_dir: str = "chroma_skin_db",
         pdf_dir: str = "skin_docs",  
         embedding_model: str = "all-MiniLM-L6-v2",
-        llm_model: str = "llama3.2:1b"
+        llm_model: str = "meta/llama-3.1-8b-instruct"
     ):
         self.persist_dir = os.path.join(BASE_DIR, persist_dir)
         self.pdf_dir = os.path.join(BASE_DIR, pdf_dir)
@@ -28,7 +28,11 @@ class SkinRAG:
         self.vectorstore = self._load_or_build_store()
         
         #  Setup LLM
-        self.llm = ChatOllama(model=llm_model, temperature=0.3)
+        self.llm = ChatNVIDIA(
+            model=llm_model,
+            temperature=0.3,
+            api_key=os.environ.get("NVIDIA_API_KEY")
+        )
         
         #  Prompt Template
         self.prompt_template = """
